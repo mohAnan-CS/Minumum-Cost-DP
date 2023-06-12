@@ -1,22 +1,23 @@
 package project;
 
-public class Node {
+public class Edge {
 
-    private String name;
-    private int petrolCost, hotelCost;
+    private String city;
+    private int petrolCost;
+    private int hotelCost;
 
-    Node(String name, int petrolCost, int hotelCost) {
-        this.name = name;
+    Edge(String city, int petrolCost, int hotelCost) {
+        this.city = city;
         this.petrolCost = petrolCost;
         this.hotelCost = hotelCost;
     }
 
-    public String getName() {
-        return name;
+    public String getCity() {
+        return city;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public int getPetrolCost() {
@@ -37,8 +38,8 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node{" +
-                "name='" + name + '\'' +
+        return "Edge{" +
+                "city='" + city + '\'' +
                 ", petrolCost=" + petrolCost +
                 ", hotelCost=" + hotelCost +
                 '}';

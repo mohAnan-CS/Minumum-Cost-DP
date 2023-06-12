@@ -2,12 +2,12 @@ package project;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class FileOperation {
+
+    static String start = "";
+    static String end = "";
 
     public static void main(String[] args) {
 
@@ -22,30 +22,38 @@ public class FileOperation {
             Scanner scanner = new Scanner(file);
             int numCities = Integer.parseInt(scanner.nextLine());
             String[] cities = scanner.nextLine().split(", ");
-            String start = cities[0], end = cities[1];
+            Map<String, City> cityMap = new HashMap<>();
+
+            start = cities[0];
+            end = cities[1];
             int count = 0 ;
+
             while (scanner.hasNextLine()) {
 
                 String[] line = scanner.nextLine().split(", ");
-
                 String cityFrom = line[0];
-                System.out.println(cityFrom);
+
                 if (count == 0){
                     checkFromCity(start, cityFrom);
                     count++;
                 }
 
-                List<Node> neighbors = addAllNeighbors(line);
-                TravelCost.graph.put(cityFrom, neighbors);
+                List<Edge> neighbors = addAllNeighbors(line);
+
+                City city = new City(cityFrom);
+                city.setEdges(neighbors);
+                cityMap.put(cityFrom, city);
 
             }
             scanner.close();
 
-
-            for (Map.Entry<String, List<Node>> entry : TravelCost.graph.entrySet()) {
-                System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+            for (Map.Entry<String, City> entry : cityMap.entrySet()) {
+                System.out.print("City : " + entry.getKey() + " -> ");
+                for (int i = 0 ; i < entry.getValue().getEdges().size() ; i++){
+                    System.out.print(entry.getValue().getEdges().get(i) + " ");
+                }
+                System.out.println();
             }
-            System.out.println(TravelCost.graph.size());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -53,22 +61,20 @@ public class FileOperation {
 
     }
 
-    private static List<Node> addAllNeighbors(String[] line) {
+    private static List<Edge> addAllNeighbors(String[] line) {
 
-        List<Node> neighbors = new ArrayList<>();
+        List<Edge> edges = new ArrayList<>();
         for (int i = 1; i < line.length; i++) {
 
             String[] nodeInfoLine = line[i].split(",");
-            System.out.println(line[i]);
             String city = nodeInfoLine[0].replace("[","");
             String petrolCost = nodeInfoLine[1];
             String hotelCost = nodeInfoLine[2].replace("]", "");
-
-            neighbors.add(new Node(city, Integer.parseInt(petrolCost), Integer.parseInt(hotelCost)));
+            edges.add(new Edge(city, Integer.parseInt(petrolCost), Integer.parseInt(hotelCost)));
 
         }
 
-        return neighbors;
+        return edges;
 
     }
 
